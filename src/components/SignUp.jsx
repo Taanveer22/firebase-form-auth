@@ -5,6 +5,7 @@ import { useState } from "react";
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState(false);
+
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log("form submitted");
@@ -12,6 +13,18 @@ const SignUp = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
+
+    // password validation
+    if (password.length < 6) {
+      setErrorMessage("password must be more than 6 characters");
+      return;
+    }
+
+    const regex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[^A-Za-z0-9]).{6,}$/;
+    if (!regex.test(password)) {
+      setErrorMessage("give at least one uppercase, lowercase, symbol, number");
+      return;
+    }
 
     // reset state status
     setErrorMessage("");
