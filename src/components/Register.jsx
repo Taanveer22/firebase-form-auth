@@ -1,3 +1,6 @@
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import auth from "../firebase/firebase.config";
+
 const Register = () => {
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -5,6 +8,15 @@ const Register = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     console.log(email, password);
+
+    // auth functionality
+    createUserWithEmailAndPassword(auth, email, password)
+      .then((result) => {
+        console.log(result.user);
+      })
+      .then((error) => {
+        console.log(error.message);
+      });
   };
   return (
     <div>
