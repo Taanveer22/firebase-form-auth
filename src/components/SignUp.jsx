@@ -4,6 +4,7 @@ import { useState } from "react";
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(false);
   const handleFormSubmit = (e) => {
     e.preventDefault();
     console.log("form submitted");
@@ -12,17 +13,20 @@ const SignUp = () => {
     const password = e.target.password.value;
     console.log(email, password);
 
-    // reset error message
+    // reset state status
     setErrorMessage("");
+    setSuccessMessage(false);
 
     // create user in firebase
     createUserWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
+        setSuccessMessage(true);
       })
       .catch((error) => {
         console.log(error.message);
         setErrorMessage(error.message);
+        setSuccessMessage(false);
       });
   };
   return (
@@ -57,6 +61,12 @@ const SignUp = () => {
       </form>
       {errorMessage && (
         <p className="text-xl font-medium text-red-500">{errorMessage}</p>
+      )}
+
+      {successMessage && (
+        <p className="text-xl font-medium text-green-500">
+          sign up successfully done
+        </p>
       )}
     </>
   );
