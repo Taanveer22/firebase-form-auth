@@ -14,7 +14,7 @@ const Register = () => {
       .then((result) => {
         console.log(result.user);
       })
-      .then((error) => {
+      .catch((error) => {
         console.log(error.message);
       });
   };
