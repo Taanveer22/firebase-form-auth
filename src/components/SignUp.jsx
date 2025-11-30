@@ -3,6 +3,7 @@ import auth from "../firebase/firebase.config";
 import { useState } from "react";
 import { FaEye } from "react-icons/fa";
 import { FaEyeSlash } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
@@ -107,6 +108,15 @@ const SignUp = () => {
           sign up successfully done
         </p>
       )}
+
+      <div className="mt-8">
+        <p className="text-xl font-medium">
+          Already Have An Account Please
+          <span className="btn btn-sm btn-info ml-3">
+            <Link to="/login">Log In</Link>
+          </span>
+        </p>
+      </div>
     </>
   );
 };
