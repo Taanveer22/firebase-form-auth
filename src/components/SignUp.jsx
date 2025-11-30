@@ -1,10 +1,13 @@
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import { useState } from "react";
+import { FaEye } from "react-icons/fa";
+import { FaEyeSlash } from "react-icons/fa";
 
 const SignUp = () => {
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -12,7 +15,14 @@ const SignUp = () => {
 
     const email = e.target.email.value;
     const password = e.target.password.value;
-    console.log(email, password);
+    const checkbox = e.target.checkbox.checked;
+    console.log(email, password, checkbox);
+
+    // checkbox validation
+    if (!checkbox) {
+      setErrorMessage("please accept our terms and conditions");
+      return;
+    }
 
     // password validation
     if (password.length < 6) {
@@ -49,7 +59,7 @@ const SignUp = () => {
         onSubmit={handleFormSubmit}
         className="card bg-base-100 w-full max-w-sm shrink-0 shadow-2xl"
       >
-        <div className="card-body">
+        <div className="card-body relative">
           <fieldset className="fieldset">
             <label className="label">Email</label>
             <input
@@ -60,14 +70,30 @@ const SignUp = () => {
             />
             <label className="label">Password</label>
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               name="password"
               className="input"
               placeholder="Password"
             />
+            <button
+              onClick={() => setShowPassword(!showPassword)}
+              className="btn btn-xs absolute right-16 top-32"
+            >
+              {showPassword ? (
+                <FaEyeSlash size={20}></FaEyeSlash>
+              ) : (
+                <FaEye size={20}></FaEye>
+              )}
+            </button>
             <div>
               <a className="link link-hover">Forgot password?</a>
             </div>
+            <fieldset className="fieldset bg-base-100 border-base-300 rounded-box w-64 border p-4">
+              <label className="label">
+                <input type="checkbox" name="checkbox" className="checkbox" />
+                Accept Our Terms and Conditons
+              </label>
+            </fieldset>
             <button className="btn btn-neutral mt-4">Sign Up</button>
           </fieldset>
         </div>

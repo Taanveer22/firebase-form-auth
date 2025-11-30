@@ -6,6 +6,7 @@ import SignIn from "../components/SignIn";
 import Register from "../components/Register";
 import SignUp from "../components/SignUp";
 import Home from "../components/Home";
+
 const MyRouter = createBrowserRouter([
   {
     path: "/",
