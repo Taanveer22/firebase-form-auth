@@ -1,11 +1,15 @@
-import { signInWithEmailAndPassword } from "firebase/auth";
+import {
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
+} from "firebase/auth";
 import auth from "../firebase/firebase.config";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 const Login = () => {
   const [successMessage, setSucceesMessage] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
+  const emailRef = useRef();
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -21,12 +25,38 @@ const Login = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((result) => {
         console.log(result.user);
-        setSucceesMessage(true);
+
+        // must need verification for login
+        if (!result.user.emailVerified) {
+          setErrorMessage("please verify your email");
+        } else {
+          setSucceesMessage(true);
+        }
       })
       .catch((error) => {
         console.log(error.message);
         setErrorMessage(error.message);
       });
+  };
+
+  const handleForgetPassword = () => {
+    console.log("forget password clicked");
+
+    const email = emailRef.current.value;
+    console.log(email);
+
+    if (!email) {
+      alert("please provide a valid email");
+    } else {
+      sendPasswordResetEmail(auth, email)
+        .then(() => {
+          alert("password reset email sent");
+        })
+        .catch((error) => {
+          console.log(error.code);
+          console.log(error.message);
+        });
+    }
   };
 
   return (
@@ -49,6 +79,7 @@ const Login = () => {
               <fieldset className="fieldset">
                 <label className="label">Email</label>
                 <input
+                  ref={emailRef}
                   type="email"
                   name="email"
                   className="input"
@@ -61,7 +92,7 @@ const Login = () => {
                   className="input"
                   placeholder="Password"
                 />
-                <div>
+                <div onClick={handleForgetPassword}>
                   <a className="link link-hover">Forgot password?</a>
                 </div>
                 <button className="btn btn-neutral mt-4">Login</button>
@@ -69,7 +100,7 @@ const Login = () => {
             </div>
             {successMessage && (
               <p className="text-xl font-medium text-green-500">
-                user login successfully
+                user login successful
               </p>
             )}
 
