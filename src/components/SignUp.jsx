@@ -1,6 +1,7 @@
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
+  updateProfile,
 } from "firebase/auth";
 import auth from "../firebase/firebase.config";
 import { useState } from "react";
@@ -20,7 +21,9 @@ const SignUp = () => {
     const email = e.target.email.value;
     const password = e.target.password.value;
     const checkbox = e.target.checkbox.checked;
-    console.log(email, password, checkbox);
+    const fullName = e.target.fullname.value;
+    const photoUrl = e.target.photourl.value;
+    console.log(email, password, checkbox, fullName, photoUrl);
 
     // checkbox validation
     if (!checkbox) {
@@ -54,6 +57,19 @@ const SignUp = () => {
         sendEmailVerification(auth.currentUser).then(() => {
           console.log("email verification sent");
         });
+
+        // update profile
+        const profileInfo = {
+          displayName: fullName,
+          photoURL: photoUrl,
+        };
+
+        updateProfile(auth.currentUser, profileInfo).then(() => {
+          console.log("profile updated");
+        });
+      })
+      .catch((error) => {
+        console.log(error, "profile not updated");
       })
       .catch((error) => {
         console.log(error.message);
@@ -70,6 +86,20 @@ const SignUp = () => {
       >
         <div className="card-body relative">
           <fieldset className="fieldset">
+            <label className="label">Full Name</label>
+            <input
+              type="text"
+              name="fullname"
+              className="input"
+              placeholder="Full Name"
+            />
+            <label className="label">Photo Url</label>
+            <input
+              type="text"
+              name="photourl"
+              className="input"
+              placeholder="Photo Url"
+            />
             <label className="label">Email</label>
             <input
               type="email"
@@ -86,7 +116,7 @@ const SignUp = () => {
             />
             <button
               onClick={() => setShowPassword(!showPassword)}
-              className="btn btn-xs absolute right-16 top-32"
+              className="btn btn-xs absolute right-16 top-68"
             >
               {showPassword ? (
                 <FaEyeSlash size={20}></FaEyeSlash>
